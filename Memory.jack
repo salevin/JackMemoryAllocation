@@ -8,22 +8,45 @@
  */ 
 class Memory {
 
+  field int freeList, max;
+  field Array Memory;
+
     /** Initializes memory parameters. */
     function void init() {
+      freeList = 2048;
+      max = 16483;
+      Memory = Array.new();
+      let Memory[2048] = 14435;
+      let Memory[2049] = -1;
     }
 
     /** Returns the value of the main memory at the given address. */
     function int peek(int address) {
+      return Memory[address];
     }
 
     /** Sets the value of the main memory at this address
      *  to the given value. */
     function void poke(int address, int value) {
+      let Memory[address] = value;
+      return;
     }
 
     /** finds and allocates from the heap a memory block of the 
      *  specified size and returns a reference to its base address. */
     function int alloc(int size) {
+      var int segSize, seg;
+      seg = freeList;
+      segSize = Memory[seg];
+      while (segSize < size){
+        if (Memory[seg+1] == -1){
+          Output.printString("Not enough memory\n");
+          return;
+        }
+        seg = Memory[seg+1];
+        segSize = Memory[seg];
+      }
+      
     }
 
     /** De-allocates the given object and frees its space. */
