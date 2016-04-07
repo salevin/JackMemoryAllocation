@@ -35,18 +35,28 @@ class Memory {
     /** finds and allocates from the heap a memory block of the 
      *  specified size and returns a reference to its base address. */
     function int alloc(int size) {
-      var int segSize, seg;
+      var int segSize, seg, prevPointer, newSeg;
+      prevPointer = -1;
       seg = freeList;
       segSize = Memory[seg];
-      while (segSize < size){
+      while (segSize < size + 1){
         if (Memory[seg+1] == -1){
-          Output.printString("Not enough memory\n");
-          return;
+          do Sys.error(6);
+          return -1;
         }
+        prevPointer = seg + 1;
         seg = Memory[seg+1];
         segSize = Memory[seg];
       }
-      
+      if (segSize - size < 2){
+        Memory[prevPointer] = Memory[seg + 1];
+        return seg + 1;
+      } else {
+        newSeg = segSize - (size + 1);
+        Memory[seg] = newSegx;
+        Memory[seg + newSeg] = size + 1;
+        return  seg + newSeg + 1;
+      }
     }
 
     /** De-allocates the given object and frees its space. */
