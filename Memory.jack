@@ -61,5 +61,19 @@ class Memory {
 
     /** De-allocates the given object and frees its space. */
     function void deAlloc(int object) {
-    }    
+      var int seg, size, freeSeg, nextSeg, prevSeg;
+      seg = object - 1;
+      size = Memory[seg];
+      prevSeg = freeList;
+      freeSeg = Memory[prevSeg + 1];
+      while (freeSeg < object){
+        if (freeSeg == -1){
+          do Sys.error(6);
+          return -1;
+        }
+        prevSeg = freeSeg;
+        freeSeg = Memory[prevSeg + 1];
+        }
+      
+    }
 }
