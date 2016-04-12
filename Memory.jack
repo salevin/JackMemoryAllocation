@@ -40,7 +40,7 @@ class Memory {
       seg = freeList;
       segSize = Memory[seg];
       while (segSize < size + 1){
-        if (Memory[seg+1] == -1){
+        if (Memory[seg+1] = -1){
           do Sys.error(6);
           return -1;
         }
@@ -61,19 +61,35 @@ class Memory {
 
     /** De-allocates the given object and frees its space. */
     function void deAlloc(int object) {
-      var int seg, size, freeSeg, nextSeg, prevSeg;
+      var int seg, size, nextSeg, prevSeg;
       seg = object - 1;
       size = Memory[seg];
-      prevSeg = freeList;
-      freeSeg = Memory[prevSeg + 1];
-      while (freeSeg < object){
-        if (freeSeg == -1){
-          do Sys.error(6);
-          return -1;
-        }
-        prevSeg = freeSeg;
-        freeSeg = Memory[prevSeg + 1];
-        }
+      nextSeg = freeList;
+      prevSeg = -1;
+      while (nextSeg < seg && ~(nextSeg = -1)){
+        prevSeg = nextSeg;
+        nextSeg = Memory[nextSeg + 1];
+      }
+
+      if (seg + Memory[seg] = nextSeg){
+        Memory[seg] = Memory[seg] + Memory[nextSeg];
+        nextSeg = Memory[nextSeg + 1];
+      }
+
+      if (prevSeg == -1){
+        freeList = seg;
+        Memory[seg + 1] = p;
+      }
+
+      else if (prevSeg + Memory[prevSeg] = seg){
+        Memory[prevSeg] = Memory[prevSeg] + Memory[seg];
+        Memory[prevSeg + 1] = nextSeg;
+      }
+
+      else {
+        Memory[prevSeg + 1] = seg;
+        Memory[seg + 1] = nextSeg;
+      }
       
     }
 }
