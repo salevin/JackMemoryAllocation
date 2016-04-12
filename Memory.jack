@@ -8,16 +8,16 @@
  */ 
 class Memory {
 
-  field int freeList, max;
-  field Array Memory;
+  static int freeList;
+  static Array Memory;
 
     /** Initializes memory parameters. */
     function void init() {
-      freeList = 2048;
-      max = 16483;
-      Memory = Array.new();
+      let freeList = 2048;
+      let Memory = Array.new();
       let Memory[2048] = 14435;
       let Memory[2049] = -1;
+      return;
     }
 
     /** Returns the value of the main memory at the given address. */
@@ -36,25 +36,25 @@ class Memory {
      *  specified size and returns a reference to its base address. */
     function int alloc(int size) {
       var int segSize, seg, prevPointer, newSeg;
-      prevPointer = -1;
-      seg = freeList;
-      segSize = Memory[seg];
+      let prevPointer = -1;
+      let seg = freeList;
+      let segSize = Memory[seg];
       while (segSize < size + 1){
         if (Memory[seg+1] = -1){
           do Sys.error(6);
           return -1;
         }
-        prevPointer = seg + 1;
-        seg = Memory[seg+1];
-        segSize = Memory[seg];
+        let prevPointer = seg + 1;
+        let seg = Memory[seg+1];
+        let segSize = Memory[seg];
       }
       if (segSize - size < 2){
-        Memory[prevPointer] = Memory[seg + 1];
+        let Memory[prevPointer] = Memory[seg + 1];
         return seg + 1;
       } else {
-        newSeg = segSize - (size + 1);
-        Memory[seg] = newSegx;
-        Memory[seg + newSeg] = size + 1;
+        let newSeg = segSize - (size + 1);
+        let Memory[seg] = newSeg;
+        let Memory[seg + newSeg] = size + 1;
         return  seg + newSeg + 1;
       }
     }
@@ -62,34 +62,36 @@ class Memory {
     /** De-allocates the given object and frees its space. */
     function void deAlloc(int object) {
       var int seg, size, nextSeg, prevSeg;
-      seg = object - 1;
-      size = Memory[seg];
-      nextSeg = freeList;
-      prevSeg = -1;
-      while (nextSeg < seg && ~(nextSeg = -1)){
-        prevSeg = nextSeg;
-        nextSeg = Memory[nextSeg + 1];
+      let seg = object - 1;
+      let size = Memory[seg];
+      let nextSeg = freeList;
+      let prevSeg = -1;
+      while (nextSeg < seg & ~(nextSeg = -1)){
+        let prevSeg = nextSeg;
+        let nextSeg = Memory[nextSeg + 1];
       }
 
       if (seg + Memory[seg] = nextSeg){
-        Memory[seg] = Memory[seg] + Memory[nextSeg];
-        nextSeg = Memory[nextSeg + 1];
+        let Memory[seg] = Memory[seg] + Memory[nextSeg];
+        let nextSeg = Memory[nextSeg + 1];
       }
 
-      if (prevSeg == -1){
-        freeList = seg;
-        Memory[seg + 1] = p;
-      }
-
-      else if (prevSeg + Memory[prevSeg] = seg){
-        Memory[prevSeg] = Memory[prevSeg] + Memory[seg];
-        Memory[prevSeg + 1] = nextSeg;
+      if (prevSeg = -1){
+        let freeList = seg;
+        let Memory[seg + 1] = nextSeg;
       }
 
       else {
-        Memory[prevSeg + 1] = seg;
-        Memory[seg + 1] = nextSeg;
+        if ((prevSeg + Memory[prevSeg]) = seg){
+          let Memory[prevSeg] = Memory[prevSeg] + Memory[seg];
+          let Memory[prevSeg + 1] = nextSeg;
+        }
+
+        else {
+          let Memory[prevSeg + 1] = seg;
+          let Memory[seg + 1] = nextSeg;
+        }
       }
-      
-    }
+        return;
+      }
 }
